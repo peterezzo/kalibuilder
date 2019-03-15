@@ -1,0 +1,12 @@
+#!/usr/bin/env ansible-playbook
+---
+- hosts: all
+  tasks:
+  - include_role:
+      name: user-setup
+
+  - include_role:
+      name: system-setup
+
+  - include_role:
+      name: tools-setup

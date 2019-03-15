@@ -1,0 +1,49 @@
+---
+- name: install pentest system packages
+  apt:
+    name: "{{ pkgs }}"
+    update_cache: yes
+    state: present
+  vars:
+    pkgs:
+      - burpsuite
+      - exploitdb
+      - gobuster
+      - libimage-exiftool-perl
+      - metasploit-framework
+      - netcat
+      - nikto
+      - nmap
+      - python-scapy
+      - python3-scapy
+      - recon-ng
+      - sqlmap
+      - veil
+      - wfuzz
+      - zaproxy
+
+- name: start postgres for metasploit
+  service:
+    name: postgresql
+    enabled: yes
+    state: started
+
+- name: pull seclists repo from github
+  git:
+    repo: 'https://github.com/danielmiessler/SecLists.git'
+    dest: /opt/seclists
+
+- name: pull payloadsallthethings repo from github
+  git:
+    repo: 'https://github.com/swisskyrepo/PayloadsAllTheThings.git'
+    dest: /opt/payloadsallthethings
+
+- name: pull linenum repo from github
+  git:
+    repo: 'https://github.com/rebootuser/LinEnum.git'
+    dest: /opt/linenum
+
+- name: pull big-list-of-naughty-strings repo from github
+  git:
+    repo: 'https://github.com/minimaxir/big-list-of-naughty-strings.git'
+    dest: /opt/linenum

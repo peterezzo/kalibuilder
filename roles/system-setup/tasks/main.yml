@@ -1,0 +1,92 @@
+---
+- name: set timezone to GMT
+  timezone:
+    name: GMT
+
+- name: set hostname
+  hostname:
+    name: kalivm-htb
+
+- name: enable 32-bit as a multiarch
+  command: dpkg --add-architecture i386
+  changed_when: no
+
+- name: update apt
+  apt:
+    update_cache: yes
+    cache_valid_time: 86400
+
+- name: install base system packages
+  apt:
+    name: "{{ pkgs }}"
+    update_cache: yes
+    state: present
+  vars:
+    pkgs:
+      - aptitude
+      - autoconf
+      - build-essential
+      - cmake
+      - curl
+      - dos2unix
+      - ftp
+      - gcc-multilib
+      - gdb
+      - git
+      - jq
+      - libemu2
+      - libemu-dev
+      - mtr
+      - nasm
+      - ncftp
+      - openvpn
+      - python
+      - python3
+      - python3-pip
+      - python-libemu
+      - python-pip
+      - rsync
+      - screen
+      - smbclient
+      - tcpdump
+      - tmux
+      - traceroute
+      - unrar-free
+      - unzip
+      - vim
+      - wget
+      - wireshark
+
+- name: remove common packages
+  apt:
+    name: "{{ remove_pkgs }}"
+    state: absent
+    purge: yes
+    autoremove: yes
+  vars:
+    remove_pkgs:
+      - popularity-contest
+
+- name: reset root login settings in sshd to default
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^PermitRootLogin'
+    state: absent
+    backup: yes
+  notify:
+    - restart ssh
+
+- name: disable passwords for sshd
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^PasswordAuthentication'
+    line: 'PasswordAuthentication no'
+    backup: yes
+  notify:
+    - restart ssh
+
+- name: start ssh server
+  service:
+    name: ssh
+    enabled: yes
+    state: started

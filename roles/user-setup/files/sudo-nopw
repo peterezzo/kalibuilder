@@ -1,0 +1,3 @@
+# this file was pushed by ansible
+%sudo ALL=(ALL: ALL) NOPASSWD: ALL
+Defaults env_keep += "http_proxy https_proxy HTTP_PROXY HTTPS_PROXY ALL_PROXY NO_PROXY"
