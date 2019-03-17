@@ -17,6 +17,7 @@
       - python-scapy
       - python3-scapy
       - recon-ng
+      - seclists
       - sqlmap
       - veil
       - wfuzz
@@ -28,10 +29,10 @@
     enabled: yes
     state: started
 
-- name: pull seclists repo from github
-  git:
-    repo: 'https://github.com/danielmiessler/SecLists.git'
-    dest: /opt/seclists
+- name: init db for metasploit
+  command: msfdb init
+  register: msfdb
+  changed_when: '"skipping initialization" not in msfdb.stdout'
 
 - name: pull payloadsallthethings repo from github
   git:
