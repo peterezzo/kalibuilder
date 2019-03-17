@@ -7,6 +7,30 @@
   hostname:
     name: kalivm-htb
 
+- name: start ssh server
+  service:
+    name: ssh
+    enabled: yes
+    state: started
+
+- name: reset root login settings in sshd to default
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^PermitRootLogin'
+    state: absent
+    backup: yes
+  notify:
+    - restart ssh
+
+- name: disable passwords for sshd
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^PasswordAuthentication'
+    line: 'PasswordAuthentication no'
+    backup: yes
+  notify:
+    - restart ssh
+
 - name: enable 32-bit as a multiarch
   command: dpkg --add-architecture i386
   changed_when: no
@@ -66,27 +90,3 @@
   vars:
     remove_pkgs:
       - popularity-contest
-
-- name: reset root login settings in sshd to default
-  lineinfile:
-    path: /etc/ssh/sshd_config
-    regexp: '^PermitRootLogin'
-    state: absent
-    backup: yes
-  notify:
-    - restart ssh
-
-- name: disable passwords for sshd
-  lineinfile:
-    path: /etc/ssh/sshd_config
-    regexp: '^PasswordAuthentication'
-    line: 'PasswordAuthentication no'
-    backup: yes
-  notify:
-    - restart ssh
-
-- name: start ssh server
-  service:
-    name: ssh
-    enabled: yes
-    state: started
