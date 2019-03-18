@@ -5,7 +5,7 @@
 
 - name: set hostname
   hostname:
-    name: kalivm-htb
+    name: "{{ inventory_hostname }}"
 
 - name: start ssh server
   service:
@@ -90,16 +90,6 @@
   vars:
     remove_pkgs:
       - popularity-contest
-
-- name: check for vscode
-  stat:
-    path: /usr/bin/code
-  register: vscode
-
-- name: install vscode
-  apt:
-    deb: "{{ vscode_url }}"
-  when: vscode.stat.exists == False
 
 - name: install extra packages from customizations
   apt:
