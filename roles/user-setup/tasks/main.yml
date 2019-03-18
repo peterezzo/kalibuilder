@@ -1,7 +1,7 @@
 ---
-- name: set authorized key for user vagrant copying it from current user
+- name: set authorized key for remote user, copying it from current user
   authorized_key:
-    user: vagrant
+    user: "{{ ansible_user }}"
     state: present
     key: "{{ lookup('file', lookup('env','HOME') + '/.ssh/id_ed25519.pub') }}"
 

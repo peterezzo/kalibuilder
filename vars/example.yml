@@ -1,0 +1,5 @@
+---
+# this file is ignored by site.yml
+proxy_server: http://proxy.example.com:3128
+extra_pkgs:
+  - kali-full
