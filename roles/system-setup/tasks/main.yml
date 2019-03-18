@@ -90,3 +90,13 @@
   vars:
     remove_pkgs:
       - popularity-contest
+
+- name: check for vscode
+  stat:
+    path: /usr/bin/code
+  register: vscode
+
+- name: install vscode
+  apt:
+    deb: "{{ vscode_url }}"
+  when: vscode.stat.exists == False
