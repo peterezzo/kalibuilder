@@ -2,8 +2,17 @@
 ---
 - hosts: all
   tasks:
+  - name: load variables
+    include_vars:
+      dir: vars
+      ignore_files: [example.yml]
+
   - include_role:
       name: user-setup
+
+  - include_role:
+      name: proxy-setup
+    when: proxy_server is defined
 
   - include_role:
       name: system-setup

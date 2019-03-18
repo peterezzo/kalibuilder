@@ -1,0 +1,20 @@
+---
+- name: copy proxy detect script
+  template:
+    src: apt-proxy-detect.sh.j2
+    dest: /usr/local/bin/apt-proxy-detect.sh
+    mode: 0755
+    backup: yes
+
+- name: copy apt proxy settings
+  copy:
+    src: apt-02proxy
+    dest: /etc/apt/apt.conf.d/02proxy
+    backup: no
+
+- name: set VZ certificate
+  copy:
+    src: VZPKIRootCA.pem
+    dest: /usr/local/share/ca-certificates/VZPKIRootCA.crt
+  notify:
+    - update-ca-certificates

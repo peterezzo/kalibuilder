@@ -100,3 +100,9 @@
   apt:
     deb: "{{ vscode_url }}"
   when: vscode.stat.exists == False
+
+- name: install extra packages from customizations
+  apt:
+    name: "{{ extra_pkgs }}"
+    update_cache: yes
+    state: present

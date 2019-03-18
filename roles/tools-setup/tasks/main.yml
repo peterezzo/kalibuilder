@@ -47,4 +47,4 @@
 - name: pull big-list-of-naughty-strings repo from github
   git:
     repo: 'https://github.com/minimaxir/big-list-of-naughty-strings.git'
-    dest: /opt/linenum
+    dest: /opt/big-list-of-naughty-strings
