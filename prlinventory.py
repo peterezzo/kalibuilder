@@ -26,7 +26,7 @@ def list_hosts():
     for vm in get_pvm_list():
         if 'kalivm' in vm['Name'] and 'running' in vm['State']:
             hosts.append(vm['Name'])
-    
+
     vagrant_vars = {'ansible_user': 'vagrant', 'ansible_ssh_pass': 'vagrant', 'ansible_become_pass': 'vagrant'}
     inventory = {'kali': {'hosts': hosts, 'vars': vagrant_vars}}
 
@@ -45,11 +45,12 @@ def host_vars(searchstring):
             for nat in get_portforward_list().values():
                 if uid in nat['destination IP/VM id'] and nat['destination port'] == 22:
                     return {'ansible_host': '127.0.0.1', 'ansible_port': nat['source port']}
-            
+
             # else go direct for the address
             mac = vm['Hardware']['net0']['mac']
             # FIXME: make it work based on IP rather than implicit DNS
-    
+            # $(prlctl list -jif kalivm-htb | jq -r '.[].Hardware.net0.mac')  /Library/Preferences/Parallels/parallels_dhcp_leases
+
     # catchall empty set
     return {}
 
