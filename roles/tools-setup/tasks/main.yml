@@ -9,6 +9,9 @@
       - burpsuite
       - exploitdb
       - gobuster
+      - hashcat
+      - hydra
+      - john
       - libimage-exiftool-perl
       - metasploit-framework
       - netcat
@@ -34,17 +37,17 @@
   register: msfdb
   changed_when: '"skipping initialization" not in msfdb.stdout'
 
-- name: pull payloadsallthethings repo from github
-  git:
-    repo: 'https://github.com/swisskyrepo/PayloadsAllTheThings.git'
-    dest: /opt/payloadsallthethings
+# - name: pull payloadsallthethings repo from github
+#   git:
+#     repo: 'https://github.com/swisskyrepo/PayloadsAllTheThings.git'
+#     dest: /opt/payloadsallthethings
 
-- name: pull linenum repo from github
-  git:
-    repo: 'https://github.com/rebootuser/LinEnum.git'
-    dest: /opt/linenum
+# - name: pull linenum repo from github
+#   git:
+#     repo: 'https://github.com/rebootuser/LinEnum.git'
+#     dest: /opt/linenum
 
-- name: pull big-list-of-naughty-strings repo from github
-  git:
-    repo: 'https://github.com/minimaxir/big-list-of-naughty-strings.git'
-    dest: /opt/big-list-of-naughty-strings
+# - name: pull big-list-of-naughty-strings repo from github
+#   git:
+#     repo: 'https://github.com/minimaxir/big-list-of-naughty-strings.git'
+#     dest: /opt/big-list-of-naughty-strings

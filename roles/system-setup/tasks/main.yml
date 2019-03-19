@@ -7,7 +7,7 @@
   hostname:
     name: "{{ inventory_hostname }}"
 
-- name: start ssh server
+- name: start ssh server at boot
   service:
     name: ssh
     enabled: yes
@@ -48,27 +48,19 @@
   vars:
     pkgs:
       - aptitude
-      - autoconf
-      - build-essential
-      - cmake
       - curl
       - dos2unix
       - ftp
       - gcc-multilib
-      - gdb
       - git
       - jq
-      - libemu2
-      - libemu-dev
       - mtr
-      - nasm
       - ncftp
       - openvpn
       - python
+      - python-pip
       - python3
       - python3-pip
-      - python-libemu
-      - python-pip
       - rsync
       - screen
       - smbclient
