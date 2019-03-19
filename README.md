@@ -5,7 +5,7 @@ Ansible scripts to provision a Kali machine for quick use.
 ## Requirements
 1. Parallels Desktop 14 for Mac Business Edition
 2. Python3 with ansible installed
-3. A Parallels VM with ssh installed and "kalivm" in the name
+3. A Parallels VM with ssh installed and "kali" in the name
 4. A VM user vagrant, password vagrant, and sudo access
 5. An ed25519 ssh key on your host machine, with pub key at ~/.ssh/id_ed25519.pub
 6. Direct internet access via shared networking, or optional proxy set in vars

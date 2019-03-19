@@ -24,7 +24,7 @@ def get_portforward_list():
 def list_hosts():
     hosts = []
     for vm in get_pvm_list():
-        if 'kalivm' in vm['Name'] and 'running' in vm['State']:
+        if 'kali' in vm['Name'] and 'running' in vm['State']:
             hosts.append(vm['Name'])
 
     vagrant_vars = {'ansible_user': 'vagrant', 'ansible_ssh_pass': 'vagrant', 'ansible_become_pass': 'vagrant'}
@@ -63,7 +63,7 @@ if __name__ == "__main__":
     # Inventory scripts must accept the --list and --host <hostname> arguments
     parser = argparse.ArgumentParser()
 
-    parser.add_argument('--list', help='List all parallels VMs with "kalivm" in their name', action='store_true')
+    parser.add_argument('--list', help='List all parallels VMs with "kali" in their name', action='store_true')
     parser.add_argument('--host', help='Return the variables for a specific host')
 
     args = parser.parse_args()
