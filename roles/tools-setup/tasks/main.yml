@@ -12,6 +12,7 @@
       - hashcat
       - hydra
       - john
+      - impacket-scripts
       - libimage-exiftool-perl
       - metasploit-framework
       - netcat
