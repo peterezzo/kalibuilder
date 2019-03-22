@@ -58,7 +58,7 @@
     repo: 'https://github.com/samratashok/nishang.git'
     dest: /opt/nishang
 
-- name: pull static-toolbox repo from github
+- name: pull redpoint repo from github
   git:
-    repo: 'https://github.com/ernw/static-toolbox.git'
-    dest: /opt/static-toolbox
+    repo: 'https://github.com/digitalbond/Redpoint.git'
+    dest: /opt/redpoint
