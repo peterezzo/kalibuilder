@@ -32,8 +32,9 @@
     - restart ssh
 
 - name: enable 32-bit as a multiarch
-  command: dpkg --add-architecture i386
-  changed_when: no
+  lineinfile:
+    path: /var/lib/dpkg/arch
+    line: i386
 
 - name: update apt
   apt:
