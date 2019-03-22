@@ -1,2 +1,2 @@
 // based on https://askubuntu.com/a/1094917
-Acquire::http::Proxy-Auto-Detect "/usr/local/bin/apt-proxy-detect.sh";
+Acquire::http::Proxy-Auto-Detect "/usr/local/bin/proxy-checker.py";

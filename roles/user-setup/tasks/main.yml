@@ -30,3 +30,9 @@
     src: vimrc
     dest: "~/.vimrc"
     backup: yes
+
+- name: add manual proxy var file
+  copy:
+    src: proxy-vars
+    dest: "~/proxy-vars"
+    backup: yes

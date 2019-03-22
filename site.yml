@@ -12,7 +12,7 @@
 
   - include_role:
       name: proxy-setup
-    when: proxy_server is defined
+    when: proxy_servers is defined
 
   - include_role:
       name: system-setup

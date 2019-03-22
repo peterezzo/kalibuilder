@@ -1,0 +1,12 @@
+# support dynamic proxy detection, if inclined to do so
+# protip: source this file
+
+if [ -f "/usr/local/bin/proxy-checker.py" ]; then
+    proxy=$(/usr/local/bin/proxy-checker.py -q) || true
+    export http_proxy=${proxy}
+    export https_proxy=${proxy}
+    export ftp_proxy=${proxy}
+    export HTTP_PROXY=${proxy}
+    export HTTPS_PROXY=${proxy}
+    export FTP_PROXY=${proxy}
+fi

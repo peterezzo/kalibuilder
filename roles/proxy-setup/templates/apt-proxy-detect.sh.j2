@@ -1,9 +1,0 @@
-#!/bin/sh
-
-export http_proxy={{ proxy_server }}
-
-if wget -q --spider --timeout=10 http://www.example.com/; then
-    echo -n "$http_proxy"
-else
-    echo -n "DIRECT"
-fi

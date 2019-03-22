@@ -1,8 +1,8 @@
 ---
 - name: copy proxy detect script
   template:
-    src: apt-proxy-detect.sh.j2
-    dest: /usr/local/bin/apt-proxy-detect.sh
+    src: proxy-checker.py.j2
+    dest: /usr/local/bin/proxy-checker.py
     mode: 0755
     backup: yes
 
@@ -11,6 +11,19 @@
     src: apt-02proxy
     dest: /etc/apt/apt.conf.d/02proxy
     backup: no
+
+- name: copy git wrapper
+  copy:
+    src: git-wrapper.sh
+    dest: /usr/local/bin/git-wrapper.sh
+    mode: 0755
+    backup: no
+
+- name: symlink git wrapper as git
+  file:
+    src: /usr/local/bin/git-wrapper.sh
+    dest: /usr/local/bin/git
+    state: link
 
 - name: set VZ certificate
   copy:
