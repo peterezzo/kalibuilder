@@ -89,3 +89,7 @@
     name: "{{ extra_pkgs }}"
     update_cache: yes
     state: present
+
+- name: call apt autoremove
+  apt:
+    autoremove: yes
