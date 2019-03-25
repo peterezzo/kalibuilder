@@ -1,9 +1,18 @@
 #!/usr/bin/env python3
+# This script checks for proxy connectivity, with optional URL to test as argument
+#
+# Success Output: The url+port of the proxy server
+# Failure Output:
+#   Default: the word DIRECT
+#   With -q arg: empty string
 
+import argparse
+import logging
 import sys
 import urllib3
 
-testurl = 'https://www.github.com'
+# default to github 
+fallbackurl = 'https://www.github.com'
 agent = 'Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101 Firefox/60.0'
 proxies = [
 {% for item in proxy_servers %}
@@ -11,27 +20,37 @@ proxies = [
 {% endfor %}
 ]
 
-def check_proxies(proxylist, emitdirect=True):
 
+def check_proxies(testurl, emitdirect):
+    """
+    Check if the testurl can be loaded
+
+    :param str testurl: the URL to check through the proxy
+    :param bool emitdirect: print 'DIRECT' if all proxies fail for the testurl, or not
+    """
     urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
-    for proxy in proxylist:
+    for proxy in proxies:
         headers = urllib3.make_headers(accept_encoding=True, user_agent=agent)
         http = urllib3.ProxyManager(proxy, headers=headers)
         try:
             r = http.request('HEAD', testurl, retries=False)
-            return(proxy)
+            # proxy can return 403 Forbidden
+            if str(r.status)[0] != 4:
+                return proxy
         except urllib3.exceptions.ProxyError:
             # 407 Auth Denied
             pass
-    
-    if emitdirect:
-        return 'DIRECT'
-    else:
-        return ''
+
+    return 'DIRECT' if emitdirect else ''
+
 
 if __name__ == "__main__":
-    emit = False if '-q' in sys.argv else True
-    proxy = check_proxies(proxies, emit)
+    parser = argparse.ArgumentParser()
 
-    print(proxy)
+    parser.add_argument('url', help='URL to check connectivity to', default=fallbackurl, nargs='?')
+    parser.add_argument('-q', help='Suppress output in case of failure', action='store_true')
+
+    args = parser.parse_args()
+
+    print(check_proxies(args.url, args.q))
