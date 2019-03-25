@@ -25,8 +25,9 @@
 - name: disable passwords for sshd
   lineinfile:
     path: /etc/ssh/sshd_config
-    regexp: '^PasswordAuthentication'
-    line: 'PasswordAuthentication no'
+    regexp: "^PasswordAuthentication"
+    insertbefore: "PermitEmptyPasswords"
+    line: PasswordAuthentication no
     backup: yes
   notify:
     - restart ssh
