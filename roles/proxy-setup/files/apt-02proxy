@@ -1,2 +1,4 @@
 // based on https://askubuntu.com/a/1094917
 Acquire::http::Proxy-Auto-Detect "/usr/local/bin/proxy-checker.py";
+Acquire::https::Proxy-Auto-Detect "/usr/local/bin/proxy-checker.py";
+Acquire::ftp::Proxy-Auto-Detect "/usr/local/bin/proxy-checker.py";
