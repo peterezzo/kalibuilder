@@ -36,6 +36,23 @@
     path: /var/lib/dpkg/arch
     line: i386
 
+- name: add microsoft apt signing key
+  apt_key:
+    data: "{{ lookup('file', 'microsoft.asc') }}"
+    state: present
+
+- name: add microsoft repo for powershell
+  apt_repository:
+    repo: deb https://packages.microsoft.com/repos/microsoft-debian-stretch-prod stretch main
+    state: present
+    update_cache: no
+
+- name: add old kali 2018.2 repo for powershell
+  apt_repository:
+    repo: deb [trusted=yes] http://old.kali.org/kali 2018.2 main
+    state: present
+    update_cache: no
+
 - name: update apt
   apt:
     update_cache: yes
@@ -58,6 +75,7 @@
       - mtr
       - ncftp
       - openvpn
+      - powershell
       - python
       - python-pip
       - python3
