@@ -44,13 +44,19 @@
 
 - name: add microsoft repo for powershell
   apt_repository:
-    repo: deb https://packages.microsoft.com/repos/microsoft-debian-stretch-prod stretch main
+    repo: deb [arch=amd64] https://packages.microsoft.com/repos/microsoft-debian-stretch-prod stretch main
     state: present
     update_cache: no
 
 - name: add old kali 2018.2 repo for powershell
   apt_repository:
     repo: deb [trusted=yes] http://old.kali.org/kali 2018.2 main
+    state: present
+    update_cache: no
+
+- name: add microsoft repo for vscode
+  apt_repository:
+    repo: deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main
     state: present
     update_cache: no
 
@@ -67,6 +73,7 @@
   vars:
     pkgs:
       - aptitude
+      - code
       - curl
       - dos2unix
       - ftp
