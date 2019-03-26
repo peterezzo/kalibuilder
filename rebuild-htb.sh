@@ -16,6 +16,7 @@ SLEEP=20
 # remove old VM if there (forced, ignore errors)
 prlctl stop ${NEWVM} 2>/dev/null
 prlctl delete ${NEWVM} 2>/dev/null
+rm facts_cache/${NEWVM} 2>/dev/null
 
 # build new VM
 prlctl clone ${BASEVM} --name ${NEWVM} --linked && \
@@ -26,4 +27,4 @@ prlctl clone ${BASEVM} --name ${NEWVM} --linked && \
   echo Fixing up ssh keys && \
   sed -i .old "/127\.0\.0\.1..${NATPORT}/d"  ~/.ssh/known_hosts && \
   ssh-keyscan -p ${NATPORT} -t ed25519 127.0.0.1 >> ~/.ssh/known_hosts && \
-  ./site.yml
+  ./site.yml --limit=kalivm-htb
