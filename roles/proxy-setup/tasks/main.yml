@@ -31,3 +31,5 @@
     dest: /usr/local/share/ca-certificates/VZPKIRootCA.crt
   notify:
     - update-ca-certificates
+
+- meta: flush_handlers
