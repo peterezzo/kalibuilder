@@ -26,7 +26,7 @@ def check_proxies(testurl, emitdirect):
     Check if the testurl can be loaded
 
     :param str testurl: the URL to check through the proxy
-    :param bool emitdirect: print 'DIRECT' if all proxies fail for the testurl, or not
+    :param bool emitdirect: print 'DIRECT' if all proxies fail for the testurl if true, or empty string if false
     """
     urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
@@ -42,7 +42,7 @@ def check_proxies(testurl, emitdirect):
             # 407 Auth Denied
             pass
 
-    return 'DIRECT' if emitdirect else ''
+    return '' if emitdirect else 'DIRECT'
 
 
 if __name__ == "__main__":
