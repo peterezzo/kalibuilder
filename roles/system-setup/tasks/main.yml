@@ -68,13 +68,14 @@
 - name: install base system packages
   apt:
     name: "{{ pkgs }}"
-    update_cache: yes
+    update_cache: no
     state: present
   vars:
     pkgs:
       - aptitude
       - code
       - curl
+      - dnsutils
       - dos2unix
       - ftp
       - gcc-multilib
@@ -91,6 +92,7 @@
       - rsync
       - screen
       - smbclient
+      - socat
       - tcpdump
       - tmux
       - traceroute
@@ -105,7 +107,6 @@
     name: "{{ remove_pkgs }}"
     state: absent
     purge: yes
-    autoremove: yes
   vars:
     remove_pkgs:
       - popularity-contest
@@ -113,7 +114,7 @@
 - name: install extra packages from customizations
   apt:
     name: "{{ extra_pkgs }}"
-    update_cache: yes
+    update_cache: no
     state: present
 
 - name: call apt autoremove
