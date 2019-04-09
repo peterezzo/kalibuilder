@@ -81,3 +81,13 @@
   git:
     repo: 'https://github.com/EmpireProject/Empire.git'
     dest: /opt/empire
+
+- name: pull freedom fighting mode repo from github
+  git:
+    repo: 'https://github.com/JusticeRage/FFM.git'
+    dest: /opt/ffm
+
+- name: pull freedom fighting scripts repo from github
+  git:
+    repo: 'https://github.com/JusticeRage/freedomfighting.git'
+    dest: /opt/freedomfighting
