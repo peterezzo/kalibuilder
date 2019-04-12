@@ -1,0 +1,22 @@
+---
+- name: install ghidra package dependencies
+  apt:
+    name: "{{ pkgs }}"
+    update_cache: no
+    state: present
+  vars:
+    pkgs:
+      - default-jdk
+  
+- name: download ghidra zip
+  get_url:
+    url: "{{ ghidra_url }}"
+    checksum: "sha256:{{ ghidra_sha256 }}"
+    dest: /root/ghidra.zip
+
+- name: extract ghidra zip
+  unarchive:
+    src: /root/ghidra.zip
+    dest: /opt
+    remote_src: yes
+    keep_newer: yes

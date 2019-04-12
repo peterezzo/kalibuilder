@@ -7,7 +7,6 @@
   vars:
     pkgs:
       - burpsuite
-      - default-jdk
       - exploitdb
       - gobuster
       - hashcat
@@ -32,6 +31,10 @@
   include_tasks: empire.yml
   when: install_empire
 
+- name: setup ghidra
+  include_tasks: ghidra.yml
+  when: install_ghidra
+
 - name: start postgres for metasploit
   service:
     name: postgresql
@@ -42,19 +45,6 @@
   command: msfdb init
   register: msfdb
   changed_when: '"skipping initialization" not in msfdb.stdout'
-
-- name: download ghidra zip
-  get_url:
-    url: "{{ ghidra_url }}"
-    checksum: "sha256:{{ ghidra_sha256 }}"
-    dest: /root/ghidra.zip
-
-- name: extract ghidra zip
-  unarchive:
-    src: /root/ghidra.zip
-    dest: /opt
-    remote_src: yes
-    keep_newer: yes
 
 - name: pull payloadsallthethings repo from github
   git:
