@@ -23,7 +23,6 @@
       - recon-ng
       - seclists
       - sqlmap
-      - veil
       - wfuzz
       - zaproxy
 
@@ -34,6 +33,10 @@
 - name: setup ghidra
   include_tasks: ghidra.yml
   when: install_ghidra
+
+- name: setup veil
+  include_tasks: veil.yml
+  when: install_veil
 
 - name: start postgres for metasploit
   service:

@@ -1,0 +1,20 @@
+---
+- name: install veil package dependencies
+  apt:
+    name: "{{ pkgs }}"
+    update_cache: no
+    state: present
+  vars:
+    pkgs:
+      - unzip
+      - git
+      - mingw-w64
+      - mono-mcs
+      - ruby
+      - python3
+      - python3-crypto
+
+- name: pull veil repo from github
+  git:
+    repo: 'https://github.com/Veil-Framework/Veil.git'
+    dest: /opt/veil

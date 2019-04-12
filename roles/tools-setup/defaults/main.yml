@@ -3,6 +3,7 @@ ansible_become: yes
 
 # tool setup
 install_empire: true
+install_veil: true
 
 install_ghidra: true
 ghidra_url: https://www.ghidra-sre.org/ghidra_9.0.1_PUBLIC_20190325.zip
