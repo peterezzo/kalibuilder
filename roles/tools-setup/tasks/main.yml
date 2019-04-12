@@ -28,6 +28,10 @@
       - wfuzz
       - zaproxy
 
+- name: setup empire
+  include_tasks: empire.yml
+  when: install_empire
+
 - name: start postgres for metasploit
   service:
     name: postgresql
@@ -76,11 +80,6 @@
   git:
     repo: 'https://github.com/digitalbond/Redpoint.git'
     dest: /opt/redpoint
-
-- name: pull empire repo from github
-  git:
-    repo: 'https://github.com/EmpireProject/Empire.git'
-    dest: /opt/empire
 
 - name: pull freedom fighting mode repo from github
   git:

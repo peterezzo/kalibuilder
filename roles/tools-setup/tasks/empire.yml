@@ -1,0 +1,44 @@
+---
+- name: pull empire repo from github
+  git:
+    repo: 'https://github.com/EmpireProject/Empire.git'
+    dest: /opt/empire
+
+- name: install empire package dependencies
+  apt:
+    name: "{{ pkgs }}"
+    update_cache: no
+    state: present
+  vars:
+    pkgs:
+      - make
+      - g++
+      - python-dev
+      - python-m2crypto
+      - swig
+      - python-pip
+      - libxml2-dev
+      - default-jdk
+      - zlib1g-dev
+      - libssl1.0-dev
+      - build-essential
+      - libssl1.0-dev
+      - libxml2-dev
+      - zlib1g-dev
+
+- name: install empire python dependencies
+  pip:
+    requirements: /opt/empire/setup/requirements.txt
+
+- name: init empire db
+  shell: python /opt/empire/setup/setup_database.py
+  args:
+    creates: /opt/empire/data/empire.db
+  environment:
+    STAGING_KEY: RANDOM
+
+- name: create empire cert
+  shell: /opt/empire/setup/cert.sh
+  args:
+    chdir: /opt/empire/setup
+    creates: /opt/empire/data/empire-priv.key

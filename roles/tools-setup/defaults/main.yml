@@ -1,4 +1,8 @@
 ---
 ansible_become: yes
+
+# tool setup
+install_empire: true
+
 ghidra_url: https://www.ghidra-sre.org/ghidra_9.0.1_PUBLIC_20190325.zip
 ghidra_sha256: 58ffa488e6dc57e2c023670c1dfac0469bdb6f4e7da98f70610d9f561b65c774
