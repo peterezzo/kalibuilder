@@ -2,7 +2,21 @@
 
 import argparse
 import json
+import paramiko
+import socket
 import subprocess
+
+
+def get_ssh_auth_methods(ip, port):
+    s = socket.socket()
+    s.connect((ip, port))
+    t = paramiko.Transport(s)
+    t.connect()
+
+    try:
+        t.auth_none('')
+    except paramiko.BadAuthenticationType as err:
+        return err.allowed_types
 
 
 def get_pvm_list():
@@ -27,7 +41,7 @@ def list_hosts():
         if 'kali' in vm['Name'] and 'running' in vm['State']:
             hosts.append(vm['Name'])
 
-    vagrant_vars = {'ansible_user': 'vagrant', 'ansible_ssh_pass': 'vagrant', 'ansible_become_pass': 'vagrant'}
+    vagrant_vars = {'ansible_user': 'vagrant', 'ansible_become_pass': 'vagrant'}
     inventory = {'kali': {'hosts': hosts, 'vars': vagrant_vars}}
 
     if len(hosts) > 0:
@@ -44,12 +58,18 @@ def host_vars(searchstring):
             # first check for a portforward
             for nat in get_portforward_list().values():
                 if uid in nat['destination IP/VM id'] and nat['destination port'] == 22:
-                    return {'ansible_host': '127.0.0.1', 'ansible_port': nat['source port']}
+                    vars = {'ansible_host': '127.0.0.1', 'ansible_ssh_port': nat['source port']}
+
+                    # second check if auth is password (base box) or key (repeat) because ansible won't let both work
+                    if 'password' in get_ssh_auth_methods('127.0.0.1', nat['source port']):
+                        vars['ansible_ssh_pass'] = 'vagrant'
+
+                    return vars
 
             # else go direct for the address
             mac = vm['Hardware']['net0']['mac']
             # FIXME: make it work based on IP rather than implicit DNS
-            # $(prlctl list -jif kalivm-htb | jq -r '.[].Hardware.net0.mac')  /Library/Preferences/Parallels/parallels_dhcp_leases
+            # grep $mac /Library/Preferences/Parallels/parallels_dhcp_leases
 
     # catchall empty set
     return {}
