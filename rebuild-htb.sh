@@ -27,4 +27,4 @@ prlctl clone ${BASEVM} --name ${NEWVM} --linked && \
   echo Fixing up ssh keys && \
   sed -i .old "/127\.0\.0\.1..${NATPORT}/d"  ~/.ssh/known_hosts && \
   ssh-keyscan -p ${NATPORT} -t ed25519 127.0.0.1 >> ~/.ssh/known_hosts && \
-  ./site.yml --limit=kalivm-htb
+  ./site.yml --limit=${NEWVM}
