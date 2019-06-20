@@ -1,0 +1,19 @@
+---
+- name: enable 32-bit as a multiarch
+  lineinfile:
+    path: /var/lib/dpkg/arch
+    line: i386
+
+- name: update apt
+  apt:
+    update_cache: yes
+    cache_valid_time: 86400
+
+- name: install dev packages
+  apt:
+    name: "{{ pkgs }}"
+    update_cache: no
+    state: present
+  vars:
+    pkgs:
+      - gcc-multilib

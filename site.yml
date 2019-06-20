@@ -7,6 +7,14 @@
       dir: vars
       ignore_files: [example.yml]
 
+  - name: set timezone to GMT
+    timezone:
+      name: GMT
+
+  - name: set hostname
+    hostname:
+      name: "{{ inventory_hostname }}"
+
   - include_role:
       name: user-setup
 
@@ -15,7 +23,67 @@
     when: proxy_servers is defined
 
   - include_role:
-      name: system-setup
+      name: sshd-settings
+
+  - include_role:
+      name: powershell
+
+  - include_role:
+      name: vscode
+
+  - name: update apt
+    apt:
+      update_cache: yes
+      cache_valid_time: 86400
+
+  - name: remove common packages
+    apt:
+      name: "{{ remove_pkgs }}"
+      state: absent
+      purge: yes
+    vars:
+      remove_pkgs:
+        - popularity-contest
+
+  - name: install base system packages
+    apt:
+      name: "{{ pkgs }}"
+      update_cache: no
+      state: present
+    vars:
+      pkgs:
+        - curl
+        - dnsutils
+        - dos2unix
+        - ftp
+        - git
+        - jq
+        - mtr
+        - ncftp
+        - openvpn
+        - python3
+        - python3-pip
+        - rsync
+        - smbclient
+        - socat
+        - tcpdump
+        - tmux
+        - traceroute
+        - unrar-free
+        - unzip
+        - vim
+        - wget
+        - wireshark
+
+  - name: install extra packages from customizations
+    apt:
+      name: "{{ extra_pkgs }}"
+      update_cache: no
+      state: present
+
+  - name: call apt autoremove
+    apt:
+      autoremove: yes
 
   - include_role:
       name: tools-setup

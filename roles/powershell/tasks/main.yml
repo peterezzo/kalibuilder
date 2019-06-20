@@ -1,0 +1,29 @@
+---
+- name: add microsoft apt signing key
+  apt_key:
+    data: "{{ lookup('file', 'microsoft.asc') }}"
+    state: present
+
+- name: add microsoft repo for powershell
+  apt_repository:
+    repo: deb [arch=amd64] https://packages.microsoft.com/repos/microsoft-debian-stretch-prod stretch main
+    filename: powershell
+    state: present
+    update_cache: no
+
+- name: add old kali 2018.2 repo for powershell
+  apt_repository:
+    repo: deb [trusted=yes] http://old.kali.org/kali 2018.2 main
+    filename: oldkali
+    state: present
+    update_cache: no
+
+- name: update apt
+  apt:
+    update_cache: yes
+
+- name: install powershell
+  apt:
+    name: powershell
+    update_cache: no
+    state: present

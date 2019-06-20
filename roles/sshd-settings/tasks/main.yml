@@ -1,0 +1,34 @@
+---
+- name: install ssh server
+  apt:
+    name: ssh
+    update_cache: no
+    state: present
+
+- name: start ssh server at boot
+  service:
+    name: ssh
+    enabled: yes
+    state: started
+
+- name: reset root login settings in sshd to default
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^PermitRootLogin'
+    state: absent
+    backup: yes
+  notify:
+    - restart ssh
+
+- name: disable passwords for sshd
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: "^PasswordAuthentication"
+    insertbefore: "PermitEmptyPasswords"
+    line: PasswordAuthentication no
+    backup: yes
+  notify:
+    - restart ssh
+
+- name: Call handlers in case ssh needs to restart
+  meta: flush_handlers
