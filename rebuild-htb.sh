@@ -8,7 +8,7 @@
 #   Retrieves ssh key for the new VM and replaces any old one
 #   Calls Ansible to Bootup
 
-BASEVM=kali-light-2019.1a
+BASEVM=kali-light-2019.2
 NEWVM=kalivm-htb
 NATPORT=56022
 SLEEP=20

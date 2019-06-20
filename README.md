@@ -15,7 +15,7 @@ Ansible scripts to provision a Kali machine for quick use.
 2. ./site.yml
 
 ## Base box Quickstart
-1. Install a kali-light image per the requirements above, named "kali-light-2019.1a"
+1. Install a kali-light image per the requirements above, named "kali-light-2019.2"
 2. ./rebuild-htb.sh
 3. Do any destructive/random stuff in kalivm-htb
 4. ./rebuild-htb.sh
