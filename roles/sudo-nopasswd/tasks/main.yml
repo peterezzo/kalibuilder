@@ -1,0 +1,6 @@
+---
+- name: set sudo group to not require password
+  copy:
+    src: sudo-nopw
+    dest: /etc/sudoers.d/sudo-nopw
+    validate: /usr/sbin/visudo -cf %s
