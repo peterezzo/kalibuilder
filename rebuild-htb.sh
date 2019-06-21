@@ -14,7 +14,7 @@ NATPORT=56022
 SLEEP=20
 
 # remove old VM if there (forced, ignore errors)
-prlctl stop ${NEWVM} 2>/dev/null
+prlctl stop ${NEWVM} --kill 2>/dev/null
 prlctl delete ${NEWVM} 2>/dev/null
 rm facts_cache/${NEWVM} 2>/dev/null
 
