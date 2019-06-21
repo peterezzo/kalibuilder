@@ -1,0 +1,12 @@
+---
+- name: set hostname
+  hostname:
+    name: "{{ inventory_hostname }}"
+
+- name: set hostname in /etc/hosts
+  lineinfile:
+    path: /etc/hosts
+    insertafter: "127.0.0.1"
+    regexp: "^127.0.1.1"
+    line: "127.0.1.1\t{{ inventory_hostname }}"
+    backup: yes
