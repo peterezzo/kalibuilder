@@ -7,36 +7,54 @@
       dir: vars
       ignore_files: [example.yml]
 
-  - name: set timezone to GMT
+  - name: Set timezone to GMT
     timezone:
       name: GMT
 
-  - name: set hostname
-    hostname:
-      name: "{{ inventory_hostname }}"
+  - name: Configure hostname
+    include_role:
+      name: hostname
 
-  - include_role:
+  - name: Set up the regular user account
+    include_role:
+      name: user-setup
+    vars:
+      ansible_become: no
+
+  - name: Set up the root account
+    include_role:
       name: user-setup
 
-  - include_role:
+  - name: Add proxy scripts
+    include_role:
       name: proxy-setup
     when: proxy_servers is defined
 
-  - include_role:
+  - name: Configure ssh daemon
+    include_role:
       name: sshd-settings
 
-  - include_role:
+  - name: Refresh inventory because ssh password -> key may have changed
+    meta: refresh_inventory
+
+  - name: Configure sudo
+    include_role:
+      name: sudo-nopasswd
+
+  - name: Install powershell
+    include_role:
       name: powershell
 
-  - include_role:
+  - name: Install visual studio code
+    include_role:
       name: vscode
 
-  - name: update apt
+  - name: Update apt
     apt:
       update_cache: yes
       cache_valid_time: 86400
 
-  - name: remove common packages
+  - name: Remove common packages
     apt:
       name: "{{ remove_pkgs }}"
       state: absent
@@ -45,7 +63,12 @@
       remove_pkgs:
         - popularity-contest
 
-  - name: install base system packages
+  - name: Upgrade system packages
+    apt:
+      update_cache: no
+      upgrade: yes
+
+  - name: Install base system packages
     apt:
       name: "{{ pkgs }}"
       update_cache: no
@@ -53,6 +76,7 @@
     vars:
       pkgs:
         - curl
+        - debconf-utils
         - dnsutils
         - dos2unix
         - ftp
@@ -75,7 +99,7 @@
         - wget
         - wireshark
 
-  - name: install extra packages from customizations
+  - name: Install extra packages from customizations
     apt:
       name: "{{ extra_pkgs }}"
       update_cache: no
