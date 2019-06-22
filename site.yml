@@ -99,15 +99,77 @@
         - wget
         - wireshark
 
-  - name: Install extra packages from customizations
-    apt:
-      name: "{{ extra_pkgs }}"
-      update_cache: no
-      state: present
-
-  - name: call apt autoremove
+  - name: Call apt autoremove
     apt:
       autoremove: yes
 
-  - include_role:
-      name: tools-setup
+  - name: Install pentest system packages
+    apt:
+      name: "{{ pkgs }}"
+      update_cache: no
+      state: present
+    vars:
+      pkgs:
+        - hydra
+        - libimage-exiftool-perl
+        - netcat
+        - nikto
+        - nmap
+        - sqlmap
+        - wfuzz
+        - zaproxy
+
+  - name: Install metasploit
+    include_role:
+      name: metasploit
+
+  # - name: Install empire
+  #   include_role:
+  #     name: empire
+
+  # - name: Install veil-evasion
+  #   include_role:
+  #     name: veil-evasion
+
+  - name: Install gobuster
+    include_role:
+      name: gobuster
+
+  - name: Install ghidra
+    include_role:
+      name: ghidra
+
+  # - name: pull payloadsallthethings repo from github
+  #   git:
+  #     repo: 'https://github.com/swisskyrepo/PayloadsAllTheThings.git'
+  #     dest: /opt/payloadsallthethings
+
+  - name: pull linenum repo from github
+    git:
+      repo: 'https://github.com/rebootuser/LinEnum.git'
+      dest: /opt/linenum
+
+  # - name: pull big-list-of-naughty-strings repo from github
+  #   git:
+  #     repo: 'https://github.com/minimaxir/big-list-of-naughty-strings.git'
+  #     dest: /opt/big-list-of-naughty-strings
+
+  - name: pull impacket repo from github
+    git:
+      repo: 'https://github.com/SecureAuthCorp/impacket.git'
+      dest: /opt/impacket
+
+  - name: pull redpoint repo from github
+    git:
+      repo: 'https://github.com/digitalbond/Redpoint.git'
+      dest: /opt/redpoint
+
+  - name: pull freedom fighting mode repo from github
+    git:
+      repo: 'https://github.com/JusticeRage/FFM.git'
+      dest: /opt/ffm
+
+  - name: pull freedom fighting scripts repo from github
+    git:
+      repo: 'https://github.com/JusticeRage/freedomfighting.git'
+      dest: /opt/freedomfighting

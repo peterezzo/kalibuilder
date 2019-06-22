@@ -1,13 +1,4 @@
 ---
-- name: install ghidra package dependencies
-  apt:
-    name: "{{ pkgs }}"
-    update_cache: no
-    state: present
-  vars:
-    pkgs:
-      - default-jdk
-  
 - name: download ghidra zip
   get_url:
     url: "{{ ghidra_url }}"

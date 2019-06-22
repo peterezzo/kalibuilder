@@ -1,0 +1,17 @@
+---
+- name: install metasploit
+  apt:
+    name: metasploit-framework
+    update_cache: no
+    state: present
+
+- name: start postgres for metasploit
+  service:
+    name: postgresql
+    enabled: yes
+    state: started
+
+- name: init db for metasploit
+  command: msfdb init
+  register: msfdb
+  changed_when: '"skipping initialization" not in msfdb.stdout'
