@@ -1,4 +1,24 @@
 ---
+- name: add rapid7 apt signing key
+  apt_key:
+    data: "{{ lookup('file', 'rapid7.asc') }}"
+    state: present
+  when: use_nightly
+
+- name: add rapid7 repo for metasploit
+  apt_repository:
+    repo: deb [arch=amd64] http://downloads.metasploit.com/data/releases/metasploit-framework/apt kali main
+    filename: metasploit-framework
+    state: present
+    update_cache: no
+  when: use_nightly
+  register: repo
+
+- name: update apt
+  apt:
+    update_cache: yes
+  when: repo.changed
+
 - name: install metasploit
   apt:
     name: metasploit-framework
