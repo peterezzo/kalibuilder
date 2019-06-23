@@ -1,20 +1,28 @@
 ---
-- name: attach parallels tools cd
-  command: prlctl installtools {{ inventory_hostname }}
-  delegate_to: 127.0.0.1
-  vars:
-    ansible_become: no
+- name: check for parallels tools already installed
+  stat:
+    path: /usr/bin/prltoolsd
+  register: ptools
 
-- name: mount cd in guest
-  command: mount /dev/cdrom /mnt
-  args:
-    warn: false
+- block:
+  - name: attach parallels tools cd
+    command: prlctl installtools {{ inventory_hostname }}
+    delegate_to: 127.0.0.1
+    vars:
+      ansible_become: no
 
-- name: install parallels tools
-  command: /mnt/install --install-unattended-with-deps
+  - name: mount cd in guest
+    command: mount /dev/cdrom /mnt
+    args:
+      warn: false
 
-- name: unmount cd in guest
-  command: umount /mnt
+  - name: install parallels tools
+    command: /mnt/install --install-unattended-with-deps
 
-- name: eject cd
-  command: eject
+  - name: unmount cd in guest
+    command: umount /mnt
+
+  - name: eject cd
+    command: eject
+
+  when: ptools.stat.exists == False

@@ -1,5 +1,4 @@
 ---
 - name: Set up parallels tools
-  include_tasks:
-    name: parallels
+  include_tasks: parallels.yml
   when: ansible_virtualization_type == 'parallels'
