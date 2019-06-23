@@ -1,0 +1,5 @@
+---
+- name: Set up parallels tools
+  include_tasks:
+    name: parallels
+  when: ansible_virtualization_type == 'parallels'

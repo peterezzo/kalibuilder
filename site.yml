@@ -41,6 +41,11 @@
     include_role:
       name: sudo-nopasswd
 
+  - name: Set up vm tools
+    include_role:
+      name: vm-tools
+    when: ansible_virtualization_type
+
   - name: Install powershell
     include_role:
       name: powershell
