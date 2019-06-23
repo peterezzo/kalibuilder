@@ -8,11 +8,15 @@
     pkgs:
       - unzip
       - git
+      - metasploit-framework
       - mingw-w64
       - mono-mcs
       - ruby
       - python3
       - python3-crypto
+      - wine
+      - wine32
+      - wine64
 
 - name: pull veil repo from github
   git:

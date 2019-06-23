@@ -1,13 +1,16 @@
 ---
+- name: check for 32-bit support
+  command: dpkg --print-foreign-architectures
+  register: archs
+
 - name: enable 32-bit as a multiarch
-  lineinfile:
-    path: /var/lib/dpkg/arch
-    line: i386
+  command: dpkg --add-architecture i386
+  register: added
 
 - name: update apt
   apt:
     update_cache: yes
-    cache_valid_time: 86400
+  when: added.changed
 
 - name: install dev packages
   apt:
