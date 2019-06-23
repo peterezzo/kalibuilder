@@ -10,6 +10,7 @@
     filename: powershell
     state: present
     update_cache: no
+  register: msrepo
 
 - name: add old kali 2018.2 repo for powershell
   apt_repository:
@@ -17,10 +18,12 @@
     filename: oldkali
     state: present
     update_cache: no
+  register: karepo
 
 - name: update apt
   apt:
     update_cache: yes
+  when: msrepo.changed or karepo.changed
 
 - name: install powershell
   apt:

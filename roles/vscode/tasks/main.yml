@@ -10,10 +10,12 @@
     filename: vscode
     state: present
     update_cache: no
+  register: msrepo
 
 - name: update apt
   apt:
     update_cache: yes
+  when: msrepo.changed
 
 - name: install vscode
   apt:
