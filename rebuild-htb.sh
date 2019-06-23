@@ -25,6 +25,6 @@ prlctl clone ${BASEVM} --name ${NEWVM} --linked && \
   echo Waiting ${SLEEP} seconds to boot && \
   sleep ${SLEEP} && \
   echo Fixing up ssh keys && \
-  sed -i .old "/127\.0\.0\.1..${NATPORT}/d"  ~/.ssh/known_hosts && \
-  ssh-keyscan -p ${NATPORT} -t ed25519 127.0.0.1 >> ~/.ssh/known_hosts && \
+  sed -i .old "/localhost.${NATPORT}/d"  ~/.ssh/known_hosts && \
+  ssh-keyscan -p ${NATPORT} -t ed25519 -4 localhost >> ~/.ssh/known_hosts && \
   ./site.yml --limit=${NEWVM}
