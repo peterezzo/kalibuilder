@@ -21,7 +21,7 @@
 
 - name: install metasploit
   apt:
-    name: metasploit-framework
+    name: [ metasploit-framework, postgresql ]
     update_cache: no
     state: present
 
