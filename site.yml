@@ -20,10 +20,14 @@
       name: user-setup
     vars:
       ansible_become: no
+      username: "{{ ansible_user }}"
 
   - name: Set up the root account
     include_role:
       name: user-setup
+    vars:
+      ansible_become: yes
+      username: root
 
   - name: Add proxy scripts
     include_role:
@@ -44,7 +48,7 @@
   - name: Set up vm tools
     include_role:
       name: vm-tools
-    when: ansible_virtualization_type
+    when: ansible_virtualization_type is defined
 
   - name: Install powershell
     include_role:
@@ -57,7 +61,6 @@
   - name: Update apt
     apt:
       update_cache: yes
-      cache_valid_time: 86400
 
   - name: Remove common packages
     apt:
@@ -71,7 +74,7 @@
   - name: Upgrade system packages
     apt:
       update_cache: no
-      upgrade: yes
+      upgrade: dist
 
   - name: Install base system packages
     apt:
@@ -103,6 +106,10 @@
         - vim
         - wget
         - wireshark
+
+  - name: Install Cinnamon
+    include_role:
+      name: cinnamon
 
   - name: Call apt autoremove
     apt:
@@ -148,6 +155,11 @@
   #   git:
   #     repo: 'https://github.com/swisskyrepo/PayloadsAllTheThings.git'
   #     dest: /opt/payloadsallthethings
+
+  # - name: 'pull seclists repo'
+  #   git:
+  #     repo: 'https://github.com/danielmiessler/SecLists.git'
+  #     dest: /opt/seclists
 
   - name: pull linenum repo from github
     git:

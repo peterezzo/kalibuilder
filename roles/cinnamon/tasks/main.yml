@@ -1,0 +1,17 @@
+---
+- name: Install Cinnamon desktop
+  apt:
+    name: "{{ pkgs }}"
+    update_cache: no
+    state: present
+  vars:
+    pkgs:
+      - cinnamon
+      - gnome-screenshot
+      - gnome-terminal
+      - lightdm
+
+- name: Set Cinnamon to default desktop
+  alternatives:
+    name: x-session-manager
+    path: /usr/bin/cinnamon-session
