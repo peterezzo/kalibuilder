@@ -16,4 +16,4 @@
   file:
     src: /root/go/bin/gobuster
     dest: /opt/gobuster
-    state: link
+    state: hard
