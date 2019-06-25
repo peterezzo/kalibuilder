@@ -1,0 +1,42 @@
+#!/usr/sbin/nft -f
+
+flush ruleset
+
+table inet filter {
+  chain input { # this chain serves as a dispatcher
+    type filter hook input priority 0;
+
+    iif lo counter accept # always accept loopback
+
+    ip6 nexthdr icmpv6 icmpv6 type { destination-unreachable, packet-too-big, time-exceeded, parameter-problem, mld-listener-query, mld-listener-report, mld-listener-reduction, nd-router-solicit, nd-router-advert, nd-neighbor-solicit, nd-neighbor-advert, ind-neighbor-solicit, ind-neighbor-advert, mld2-listener-report } counter accept
+    ip protocol icmp icmp type { destination-unreachable, router-solicitation, router-advertisement, time-exceeded, parameter-problem } counter accept
+    ip protocol igmp counter accept
+
+    iifname eth0 jump input_shared
+    iifname eth1 jump input_wan
+
+    counter log drop # from all other interfaces
+  }
+  chain input_shared { # rules for VM shared network
+    ct state {established,related} counter accept
+    ct state invalid counter drop
+    tcp dport 22 ct state new counter accept
+    tcp dport 8000-8010 ct state new counter accept
+    counter log drop # all traffic
+  }
+  chain input_wan { # rules for publically exposed network
+    ct state {established,related} counter accept
+    ct state invalid counter drop
+    ip protocol icmp icmp type echo-request ct state new counter accept
+    ip6 nexthdr icmpv6 icmpv6 type echo-request ct state new counter accept
+    ip saddr 10.10.10.0/24 tcp dport 8000-8010 ct state new counter accept
+    counter log drop # all other traffic
+  }
+  chain ouput { # we let everything out
+    type filter hook output priority 0;
+    oif lo counter accept
+    oifname eth0 counter accept
+    oifname eth1 counter accept
+    counter log drop
+  }
+}
