@@ -35,3 +35,4 @@
   command: msfdb init
   register: msfdb
   changed_when: '"skipping initialization" not in msfdb.stdout'
+  ignore_errors: yes
