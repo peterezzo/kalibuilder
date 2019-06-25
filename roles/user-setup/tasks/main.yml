@@ -1,7 +1,7 @@
 ---
 - name: set authorized key for remote user, copying it from current user
   authorized_key:
-    user: "{{ ansible_user }}"
+    user: "{{ username }}"
     state: present
     key: "{{ lookup('file', lookup('env','HOME') + '/.ssh/id_ed25519.pub') }}"
 
