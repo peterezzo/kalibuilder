@@ -7,13 +7,19 @@
 #   With -q arg: empty string
 
 import argparse
-import logging
-import sys
+import json
+import os
+import time
 import urllib3
 
-# default to github 
-fallbackurl = 'https://www.github.com'
+from urllib.parse import urlsplit
+
+# default to github
+fallbackurl = 'https://www.github.com/'
 agent = 'Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101 Firefox/60.0'
+# cachefile = os.path.expanduser('~/.proxy-checker.json')
+cachefile = '/tmp/proxy-checker.json'
+cachetime = 600
 proxies = [
 {% for item in proxy_servers %}
     '{{ item }}',
@@ -21,12 +27,56 @@ proxies = [
 ]
 
 
-def check_proxies(testurl, emitdirect):
+def base_url(url):
+    """
+    Get the hostname for a given url
+
+    :param str url: the URL to extract proto and hostname from
+    """
+    return '{0.scheme}://{0.netloc}/'.format(urlsplit(url))
+
+
+def load_cache():
+    """
+    Load the cache file
+    """
+    try:
+        with open(cachefile, 'r') as f:
+            cache = json.load(f)
+    except (FileNotFoundError, json.decoder.JSONDecodeError):
+        cache = {}
+
+    return cache
+
+
+def save_cache(testurl, proxy):
+    """
+    Save the results of a test in the cache
+
+    :param str testurl: the URL checked through the proxy
+    :param str proxy: the string result from the check
+
+    The cache uses a dict where the key is a tuple of proxy and time
+    """
+    cache = load_cache()
+    url = base_url(testurl)
+
+    cache[url] = {'proxy': proxy, 'last_use': time.time()}
+
+    with open(cachefile, 'w') as f:
+        json.dump(cache, f)
+
+    try:
+        os.chmod(cachefile, 0o666)
+    except PermissionError:
+        pass
+
+
+def check_proxies(testurl):
     """
     Check if the testurl can be loaded
 
     :param str testurl: the URL to check through the proxy
-    :param bool emitdirect: print 'DIRECT' if all proxies fail for the testurl if true, or empty string if false
     """
     urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
@@ -37,12 +87,36 @@ def check_proxies(testurl, emitdirect):
             r = http.request('HEAD', testurl, retries=False)
             # proxy can return 403 Forbidden
             if str(r.status)[0] != 4:
+                save_cache(testurl, proxy)
                 return proxy
         except urllib3.exceptions.ProxyError:
             # 407 Auth Denied
             pass
 
-    return 'DIRECT' if emitdirect else ''
+    return ''
+
+
+def get_proxy(testurl, emitdirect):
+    """
+    Get the proxy to use for a given url
+
+    :param str testurl: the URL to check through the proxy
+    :param bool emitdirect: print 'DIRECT' if all proxies fail for the testurl if true, or empty string if false
+    """
+    now = time.time()
+    cache = load_cache()
+    url = base_url(testurl)
+
+    try:
+        delta = now - cache[url]['last_use']
+        cachedproxy = cache[url]['proxy']
+    except KeyError:
+        delta = cachetime
+        cachedproxy = ''
+
+    proxy = cachedproxy if cachetime > delta else check_proxies(testurl)
+
+    return 'DIRECT' if emitdirect and not proxy else proxy
 
 
 if __name__ == "__main__":
@@ -53,4 +127,4 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
-    print(check_proxies(args.url, args.q))
+    print(get_proxy(args.url, args.q))

@@ -28,8 +28,27 @@
 - name: set VZ certificate
   copy:
     src: VZPKIRootCA.pem
-    dest: /usr/local/share/ca-certificates/VZPKIRootCA.crt
+    dest: "{{ certstore_path }}/VZPKIRootCA.crt"
   notify:
     - update-ca-certificates
 
-- meta: flush_handlers
+- name: set elastica certificate
+  copy:
+    src: elastica.pem
+    dest: "{{ certstore_path }}/elastica.crt"
+  notify:
+    - update-ca-certificates
+
+- name: update-ca-certificates
+  meta: flush_handlers
+
+- name: copy python wrapper
+  copy:
+    src: python-wrapper.sh
+    dest: /usr/local/bin/python-wrapper.sh
+    mode: 0755
+    backup: no
+
+- name: set ansible to use wrapped python
+  set_fact:
+    ansible_python_interpreter: /usr/local/bin/python-wrapper.sh
