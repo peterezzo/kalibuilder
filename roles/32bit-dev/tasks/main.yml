@@ -6,6 +6,7 @@
 - name: enable 32-bit as a multiarch
   command: dpkg --add-architecture i386
   register: added
+  when: '"i386" not in archs.stdout'
 
 - name: update apt
   apt:
