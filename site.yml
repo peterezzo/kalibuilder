@@ -147,6 +147,10 @@
     include_role:
       name: gobuster
 
+  - name: Install pspy
+    include_role:
+      name: pspy
+
   - name: Install ghidra
     include_role:
       name: ghidra

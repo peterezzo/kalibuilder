@@ -1,0 +1,22 @@
+---
+- name: Install requirements
+  apt:
+    name: "{{ pkgs }}"
+    update_cache: no
+    state: present
+  vars:
+    pkgs:
+      - golang
+      - git
+
+- name: Build pspy from github
+  command: go get -ldflags '-extldflags "-static"' github.com/dominicbreuker/pspy
+  environment:
+    - CGO_ENABLED: 0
+    - GOOS: linux
+
+- name: Link pspy binary to opt
+  file:
+    src: /root/go/bin/pspy
+    dest: /opt/pspy64
+    state: hard
