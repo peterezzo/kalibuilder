@@ -83,6 +83,7 @@
       state: present
     vars:
       pkgs:
+        - binutils
         - curl
         - debconf-utils
         - dnsutils
@@ -124,6 +125,7 @@
       state: present
     vars:
       pkgs:
+        - aircrack-ng
         - cewl
         - hydra
         - john
