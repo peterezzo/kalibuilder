@@ -15,8 +15,9 @@
     - CGO_ENABLED: 0
     - GOOS: linux
 
-- name: Link pspy binary to opt
-  file:
+- name: Copy pspy binary to opt
+  copy:
     src: /root/go/bin/pspy
     dest: /opt/pspy64
-    state: hard
+    remote_src: yes
+    backup: yes
