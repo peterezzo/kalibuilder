@@ -12,8 +12,9 @@
 - name: Install gobuster from github
   command: go get github.com/OJ/gobuster
 
-- name: Link gobuster binary to opt
-  file:
+- name: Copy gobuster binary to opt
+  copy:
     src: /root/go/bin/gobuster
     dest: /opt/gobuster
-    state: hard
+    remote_src: yes
+    backup: yes
